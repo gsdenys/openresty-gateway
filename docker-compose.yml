@@ -12,6 +12,12 @@ services:
       - "8080:8080"
     networks:
       - api-gateway
+  echo:
+    image: "gsdenys/echo:v1.0"
+    ports:
+      - "3000:3000"
+    networks:
+      - api-gateway
 networks:
   api-gateway:
     # driver: bridge
