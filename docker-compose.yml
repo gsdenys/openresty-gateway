@@ -1,23 +1,37 @@
 version: "3.9"
 services:
+  # Redis database to store paths and services
   redis:
+    container_name: api_gateway_redis
+    hostname: redis.local
     image: "redis:alpine"
     ports:
       - "6379:6379"
     networks:
-      - api-gateway
-  nginx:
-    build: .
-    ports:
-      - "8080:8080"
-    networks:
-      - api-gateway
+      - apigateway
+
+  # Simple API that echo the request body (POST, PUT) or query string (GET and DELETE)
   echo:
+    container_name: api_gateway_echo
+    hostname: echo.local
     image: "gsdenys/echo:v1.0"
     ports:
       - "3000:3000"
     networks:
-      - api-gateway
+      - apigateway
+
+  # The simple API Gateway implementation
+  nginx:
+    container_name: api_gateway_nginx
+    hostname: nginx.local
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - apigateway
+    depends_on:
+      - redis
+      - echo
+
 networks:
-  api-gateway:
-    # driver: bridge
+  apigateway:

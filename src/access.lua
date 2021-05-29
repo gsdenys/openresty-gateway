@@ -14,9 +14,9 @@ local red = ngx.redis:new()
 red:set_timeout(1000) -- 1 second    
 -- end
 
-local ok, err = red:connect("172.26.0.2", 6379, {
+local ok, err = red:connect("redis.local", 6379, {
         pool = "redis-connection-pool",
-        pool_size = 10000
+        pool_size = 50000   
     })
 
 if not ok then
@@ -38,7 +38,7 @@ if host == ngx.null then
     return ngx.exit(400)
 end
 
-local ok, err = red:set_keepalive(10000, 10000)
+local ok, err = red:set_keepalive(50000, 10000)
 if not ok then
     ngx.say("failed to set keepalive: ", err)
     return
